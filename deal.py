@@ -15,9 +15,13 @@ def export_data(data):
 
 	##把空缺值直接置零
 	df = df.fillna(value = 0)
+	
+#	df['name'] = df['name'] + ' ' + df['rank']
+	df['rank'] = df['rank'].astype('int').astype('str')
+	df['rankname'] = df['name'].str.cat(df['rank'], sep=': ')
 
 	##调准数据顺序
-	key_list = ['sum', 'level', 'name', 'userid']
+	key_list = ['sum', 'level', 'rank', 'name', 'userid', 'rankname']
 	for i in key_list:
 		tmp = df[i]
 		df.drop(labels=[i], axis=1,inplace = True)
@@ -26,26 +30,28 @@ def export_data(data):
 
 #	df.to_csv('古战场.xls', index = False, encoding="utf_8_sig")
 
-	data_keys = df.keys()[3:]
+	data_keys = df.keys()[5:]
 	plt.figure(figsize=(15, 15 * len(data_keys)))
 	data_len = len(data_keys)
 	plt.subplot(data_len, 1, 1)
 
 	for i in range (0, len(data_keys)):
 		if i == 0:
-			data_key = 0
-		else:
-			data_key = data_len - i
-		tmp = df[['name', data_keys[data_key]]]
-		if i == 0:
+			y_label = 'rankname'
+			data_key = 'sum'
 			title = '总贡献'
 		else:
-			title = data_keys[data_key] + '贡献'
-		tmp = tmp.sort_values(by=data_keys[data_key], ascending = False)
+			y_label = 'name'
+			data_key = data_keys[data_len - i]
+			title = data_key + '贡献'
+
+		tmp = df[[y_label, data_key]]
+
+		tmp = tmp.sort_values(by=data_key, ascending = False)
 	#	average_age = tmp.groupby([i],as_index=False).mean()
 	#	plt.figure(figsize=(15, 15))
-		plt_tmp = plt.subplot(data_len, 1, i+1, title = title, xlabel = data_keys[data_key], ylabel = 'name')
-		sns.barplot(x = data_keys[data_key], y = 'name', data=tmp)
+		plt_tmp = plt.subplot(data_len, 1, i+1, title = title, xlabel = data_key, ylabel = y_label)
+		sns.barplot(x = data_key, y = y_label, data=tmp)
 		plt.subplot(plt_tmp)
 		
 	plt.savefig('古战场警察.png')
