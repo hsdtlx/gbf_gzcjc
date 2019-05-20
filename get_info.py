@@ -62,7 +62,31 @@ def get_info(ids, post_session):
 	point_response = requests.post(url = url, data = point_post_data, headers = point_post_headers, timeout = 10)
 
 	point_response_data = point_response.json()
-	point_info = point_response_data['result']
+	point_info = list(point_response_data['result'])[0].values()
+	point_info = list(point_info)[0]
+	point_info = point_info[-1]
+	res['rank'] = int(point_info['rank'])
+	
+	point_post_data = {
+			"method": "getUserDayPoint",
+			"params": '{"teamraidid":"teamraid045","userid": "' + ids + '"}'
+		}
+
+	point_response = requests.post(url = url, data = point_post_data, headers = point_post_headers, timeout = 10)
+
+	point_response_data = point_response.json()
+	point_info = list(point_response_data['result'])
+	
+	info_len = len(point_info)
+	
+	for i in range(info_len):
+		if i==0:
+			res['sum'] = point_info[i]['maxp']
+		if i == info_len - 1:
+			res[point_info[i]['updatedate']] = int(point_info[i]['maxp'])
+		else:
+			res[point_info[i]['updatedate']] = int(point_info[i]['maxp']) - int(point_info[i]['minp'])
+	
 #	
 #	if (point_info[0].values()):
 #		test_tmp = list(point_info[0].values())[0][0]
@@ -71,16 +95,16 @@ def get_info(ids, post_session):
 	
 #	test_tmp = list(point_info[0].values())[0][0]
 
-	for i in range(len(point_info)):
-		if i == 0:
-			if list(point_info[0].values())[0]:
-				test_tmp = list(point_info[0].values())[0][0]
-				res['rank'] = int(test_tmp['rank'])
-				res['sum'] = int(test_tmp['point'])
-		else:
-			test_key = list(point_info[i].keys())[0]
-			test_tmp = list(point_info[i].values())[0][0]
-			res[test_key] = int(test_tmp['point'])
+#	for i in range(len(point_info)):
+#		if i == 0:
+#			if list(point_info[0].values())[0]:
+#				test_tmp = list(point_info[0].values())[0][0]
+#				res['rank'] = int(test_tmp['rank'])
+#				res['sum'] = int(test_tmp['point'])
+#		else:
+#			test_key = list(point_info[i].keys())[0]
+#			test_tmp = list(point_info[i].values())[0][0]
+#			res[test_key] = int(test_tmp['point'])
 
 	return res
 

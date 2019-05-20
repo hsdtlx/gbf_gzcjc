@@ -17,8 +17,8 @@ def export_data(data):
 	df = df.fillna(value = 0)
 	
 #	df['name'] = df['name'] + ' ' + df['rank']
-	df['rank'] = df['rank'].astype('int').astype('str')
-	df['rankname'] = df['name'].str.cat(df['rank'], sep=': ')
+	df['rank']
+	df['rankname'] = df['name'].str.cat(df['rank'].astype('int').astype('str'), sep=': ')
 
 	##调准数据顺序
 	key_list = ['sum', 'level', 'rank', 'name', 'userid', 'rankname']
@@ -26,9 +26,9 @@ def export_data(data):
 		tmp = df[i]
 		df.drop(labels=[i], axis=1,inplace = True)
 		df.insert(0, i, tmp)
+	df['sum'] = df['sum'].astype('int')
 
-
-#	df.to_csv('古战场.xls', index = False, encoding="utf_8_sig")
+	df.to_csv('古战场.xls', index = False, encoding="utf_8_sig")
 
 	data_keys = df.keys()[5:]
 	plt.figure(figsize=(15, 15 * len(data_keys)))
