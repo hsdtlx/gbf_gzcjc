@@ -33,7 +33,7 @@ else:
 point_list = []
 
 for i in range(len(menber_list)):
-	time.sleep(0.1)
+#	time.sleep(1)
 	point_list.append(get_info.get_info(str(menber_list[i]), post_session))
 
 with open("point.json",'w',encoding='utf-8') as json_file:

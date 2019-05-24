@@ -8,7 +8,7 @@ def get_info(ids, post_session):
 
 	userinfo_post_headers = {
 		"Host": "info.gbfteamraid.fun",
-		"Connection": "keep-alive",
+		"Connection": "close",
 		"Content-Length": "86",
 		"Pragma": "no-cache",
 		"Cache-Control": "no-cache",
@@ -29,6 +29,7 @@ def get_info(ids, post_session):
 
 	userinfo_response = requests.post(url = url, data = userinfo_post_data, headers = userinfo_post_headers, timeout = 10)
 	userinfo_response_data = userinfo_response.json()
+#	requests.close()
 	userinfo = userinfo_response_data['result']
 	
 
@@ -38,7 +39,7 @@ def get_info(ids, post_session):
 
 	point_post_headers = {
 		"Host": "info.gbfteamraid.fun",
-		"Connection": "keep-alive",
+		"Connection": "close",
 		"Content-Length": "108",
 		"Pragma": "no-cache",
 		"Cache-Control": "no-cache",
@@ -62,6 +63,7 @@ def get_info(ids, post_session):
 	point_response = requests.post(url = url, data = point_post_data, headers = point_post_headers, timeout = 10)
 
 	point_response_data = point_response.json()
+#	requests.close()
 	point_info = list(point_response_data['result'])[0].values()
 	point_info = list(point_info)[0]
 	if (len(point_info) > 0):
@@ -76,6 +78,7 @@ def get_info(ids, post_session):
 	point_response = requests.post(url = url, data = point_post_data, headers = point_post_headers, timeout = 10)
 
 	point_response_data = point_response.json()
+#	requests.close()
 	point_info = list(point_response_data['result'])
 	
 	info_len = len(point_info)
@@ -86,7 +89,7 @@ def get_info(ids, post_session):
 		if i == info_len - 1:
 			res[point_info[i]['updatedate']] = int(point_info[i]['maxp'])
 		else:
-			res[point_info[i]['updatedate']] = int(point_info[i]['maxp']) - int(point_info[i]['minp'])
+			res[point_info[i]['updatedate']] = int(point_info[i]['maxp']) - int(point_info[i+1]['maxp'])
 	
 	return res
 
