@@ -1,3 +1,4 @@
+#coding=UTF-8
 ## 对获取的json进行处理并以日期为单位绘图
 import json
 import numpy as np
